@@ -13,7 +13,7 @@ import { Redis } from "@upstash/redis";
 // Create a new ratelimiter, that allows 5 requests per 1 minute
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(5, "1 m"),
+  limiter: Ratelimit.slidingWindow(1, "1 m"),
   analytics: true,
   /**
    * Optional prefix for the keys used in redis. This is useful if you want to share a redis
@@ -63,7 +63,10 @@ export const postsRouter = createTRPCRouter({
   create: privateProcedure
     .input(
       z.object({
-        content: z.string().min(1).max(255),
+        content: z
+          .string()
+          .min(1, "Can't create empty post")
+          .max(255, "Post too long"),
       })
     )
     .mutation(async ({ ctx, input }) => {
