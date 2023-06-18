@@ -15,7 +15,6 @@ model Post {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    title     String   @db.VarChar(63)
     content   String   @db.VarChar(255)
     published Boolean  @default(false)
     authorId  String
