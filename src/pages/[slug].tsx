@@ -1,6 +1,26 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { api } from "~/utils/api";
+import { LoadingPage } from "~/components/loading";
+import { PostView } from "~/components/postView";
+
+const ProfileFeed = (props: { userId: string }) => {
+  const { data, isLoading } = api.posts.getPostsByUserId.useQuery({
+    id: props.userId,
+  });
+  if (isLoading) return <LoadingPage size={40} />;
+  if (!data) return <div>Something went wrong</div>;
+
+  console.log({ data });
+
+  return (
+    <div className="flex flex-col">
+      {data.map((fullPost) => (
+        <PostView key={fullPost.post.id} {...fullPost} />
+      ))}
+    </div>
+  );
+};
 
 const ProfilePage: NextPage<{ slug: string }> = ({ slug }) => {
   // const slug = "user_2RNfskPK4EbvZ3zQ5DyARgM8Y2r";
@@ -35,9 +55,10 @@ const ProfilePage: NextPage<{ slug: string }> = ({ slug }) => {
           />
         </div>
         <div className="h-12" />
-        <div className="border-b border-slate-400 p-4 text-2xl font-bold">
+        <div className="border-b border-slate-400 p-4 pb-8 text-2xl font-bold">
           {data.username}
         </div>
+        <ProfileFeed userId={slug} />
       </PageLayout>
     </>
   );
