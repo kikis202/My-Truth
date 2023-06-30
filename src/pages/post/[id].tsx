@@ -1,10 +1,7 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { api } from "~/utils/api";
-import { LoadingPage } from "~/components/loading";
 import { PostView } from "~/components/postView";
-import { PageLayout } from "~/components/layout";
-import Image from "next/image";
 import { generateSSHelper } from "~/server/helpers/ssgHelper";
 
 const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
