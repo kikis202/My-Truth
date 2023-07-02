@@ -11,7 +11,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       <Head>
         <title>My truth</title>
         <meta name="description" content="Twitter clone" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.svg" />
       </Head>
 
       <Toaster position="bottom-left" />
