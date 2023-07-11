@@ -1,6 +1,10 @@
-import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
+import {
+  SignInButton,
+  SignOutButton,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
 import { type NextPage } from "next";
-import Image from "next/image";
 import { api } from "~/utils/api";
 
 import { LoadingPage } from "~/components/loading";
@@ -37,12 +41,17 @@ const CreatePostWizard = () => {
 
   return (
     <div className="flex w-full items-center justify-start gap-4">
-      <Image
-        src={user.profileImageUrl}
-        alt="Profile image"
-        className="h-10 w-10 rounded-full"
-        width={40}
-        height={40}
+      <UserButton
+        appearance={{
+          elements: {
+            userButtonAvatarBox: {
+              width: 40,
+              height: 40,
+            },
+          },
+        }}
+        userProfileMode="navigation"
+        userProfileUrl={`/${user.id}`}
       />
       <input
         placeholder="What's on your mind?"

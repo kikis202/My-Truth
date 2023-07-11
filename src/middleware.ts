@@ -7,7 +7,7 @@ export const config = {
   matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };
 
-const privateRoutes = ["/foo", "/bar"];
+const privateRoutes = ["/profile"];
 export default authMiddleware({
   afterAuth(auth, req, evt) {
     if (!auth.userId && privateRoutes.includes(req.nextUrl.pathname)) {
