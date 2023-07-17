@@ -2,26 +2,30 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 env:
   DATABASE_URL: "https://fake.com"
+  NEXTAUTH_SECRET: "totally_real_secret"
+  NEXTAUTH_URL: "https://fake.com"
+  GITHUB_CLIENT_ID: "totally_real_id"
+  GITHUB_CLIENT_SECRET: "totally_real_secret"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Run TypeScript type check
-      run: npx tsc --noEmit
+      - name: Run TypeScript type check
+        run: npm run typecheck
 
-    - name: Run linter
-      run: npm run lint
+      - name: Run linter
+        run: npm run lint

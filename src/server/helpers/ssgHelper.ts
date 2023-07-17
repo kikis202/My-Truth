@@ -6,6 +6,6 @@ import { prisma } from "~/server/db";
 export const generateSSHelper = () =>
   createServerSideHelpers({
     router: appRouter,
-    ctx: { prisma, currentUserId: null },
+    ctx: { prisma, session: null },
     transformer: superjson, // optional - adds superjson serialization
   });

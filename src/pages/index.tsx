@@ -1,6 +1,4 @@
-import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
-import Image from "next/image";
 import { api } from "~/utils/api";
 
 import { LoadingPage } from "~/components/loading";
@@ -8,11 +6,12 @@ import { useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
 import { PageLayout } from "~/components/layout";
 import { PostView } from "~/components/postView";
+import { useSession, signIn, signOut } from "next-auth/react";
+import Image from "next/image";
 
 const CreatePostWizard = () => {
-  const { user } = useUser();
-
   const [input, setInput] = useState("");
+  const { data } = useSession();
 
   const ctx = api.useContext();
 
@@ -33,17 +32,19 @@ const CreatePostWizard = () => {
     },
   });
 
-  if (!user) return null;
+  if (!data) return null;
 
   return (
     <div className="flex w-full items-center justify-start gap-4">
-      <Image
-        src={user.profileImageUrl}
-        alt="Profile image"
-        className="h-10 w-10 rounded-full"
-        width={40}
-        height={40}
-      />
+      {data.user.image && (
+        <Image
+          src={data.user.image}
+          alt={`${data.user.name ?? "Anon"} Profile Image`}
+          className=" h-14 w-14 rounded-full border-2 border-gray-900 bg-gray-900"
+          width={56}
+          height={56}
+        />
+      )}
       <input
         placeholder="What's on your mind?"
         className="grow bg-transparent outline-none"
@@ -69,8 +70,13 @@ const CreatePostWizard = () => {
           </button>
         )
       )}
-
-      <SignOutButton />
+      <button
+        onClick={() => {
+          signOut().catch(console.error);
+        }}
+      >
+        Sign Out
+      </button>
     </div>
   );
 };
@@ -83,27 +89,35 @@ const Feed = () => {
 
   return (
     <div className="flex flex-col">
-      {data.map((fullPost) => (
-        <PostView key={fullPost.post.id} {...fullPost} />
+      {data.map((post) => (
+        <PostView key={post.id} {...post} />
       ))}
     </div>
   );
 };
 
 const Home: NextPage = () => {
-  const { isLoaded: userLoaded, isSignedIn } = useUser();
-
   // Start fetching asap
   api.posts.getAll.useQuery();
+  const { status } = useSession();
 
-  if (!userLoaded) return <></>;
+  if (status === "loading") return <LoadingPage></LoadingPage>;
 
   return (
     <>
       <PageLayout>
         <div className="flex justify-end border-b border-slate-400 p-4">
-          {isSignedIn && <CreatePostWizard />}
-          {!isSignedIn && <SignInButton />}
+          {status === "authenticated" ? (
+            <CreatePostWizard />
+          ) : (
+            <button
+              onClick={() => {
+                signIn("github").catch(console.error);
+              }}
+            >
+              Sign In
+            </button>
+          )}
         </div>
         <Feed />
       </PageLayout>
