@@ -16,15 +16,15 @@ const ProfileFeed = (props: { userId: string }) => {
 
   return (
     <div className="flex flex-col">
-      {data.map((fullPost) => (
-        <PostView key={fullPost.post.id} {...fullPost} />
+      {data.map((post) => (
+        <PostView key={post.id} {...post} />
       ))}
     </div>
   );
 };
 
-const ProfilePage: NextPage<{ slug: string }> = ({ slug }) => {
-  const { data } = api.profile.getUserById.useQuery({ id: slug });
+const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
+  const { data } = api.profile.getUserById.useQuery({ id });
 
   if (!data) {
     return (
@@ -42,41 +42,43 @@ const ProfilePage: NextPage<{ slug: string }> = ({ slug }) => {
   return (
     <>
       <Head>
-        <title>{data.username} Profile</title>
+        <title>{data.name ?? "Anon"} Profile</title>
       </Head>
       <PageLayout>
         <div className="relative flex h-32 border-b border-slate-400 bg-cyan-900 p-4">
-          <Image
-            src={data.profileImageUrl}
-            alt={`${data.username} Profile Image`}
-            className="absolute bottom-0 left-0 -mb-12 ml-6 h-24 w-24 rounded-full border-2 border-gray-900 bg-gray-900"
-            width={96}
-            height={96}
-          />
+          {data.image && (
+            <Image
+              src={data.image}
+              alt={`${data.name ?? "Anon"} Profile Image`}
+              className="absolute bottom-0 left-0 -mb-12 ml-6 h-24 w-24 rounded-full border-2 border-gray-900 bg-gray-900"
+              width={96}
+              height={96}
+            />
+          )}
         </div>
         <div className="h-12" />
         <div className="border-b border-slate-400 p-4 pb-8 text-2xl font-bold">
-          {data.username}
+          {data.name ?? "Anon"}
         </div>
-        <ProfileFeed userId={slug} />
+        <ProfileFeed userId={id} />
       </PageLayout>
     </>
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (ctx) => {
   const helpers = generateSSHelper();
 
-  const slug = context.params?.slug;
+  const id = ctx.params?.id;
 
-  if (typeof slug !== "string") throw new Error("no slug");
+  if (typeof id !== "string") throw new Error("no slug");
 
-  await helpers.profile.getUserById.prefetch({ id: slug });
+  await helpers.profile.getUserById.prefetch({ id });
 
   return {
     props: {
       trpcState: helpers.dehydrate(),
-      slug,
+      id,
     },
   };
 };

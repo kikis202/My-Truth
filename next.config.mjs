@@ -9,7 +9,7 @@ const config = {
   reactStrictMode: true,
 
   images: {
-    domains: ["images.clerk.dev"],
+    domains: ["avatars.githubusercontent.com"],
   },
 
   /**
@@ -23,4 +23,5 @@ const config = {
     defaultLocale: "en",
   },
 };
+
 export default config;

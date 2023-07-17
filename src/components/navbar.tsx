@@ -1,10 +1,11 @@
-import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { GuestNavItems, UserNavItems } from "./navbarItems";
+import { useSession } from "next-auth/react";
 
 export const Navbar = () => {
-  const { isSignedIn } = useUser();
+  const { status } = useSession();
+  if (status === "loading") return null;
   return (
     <>
       <button
@@ -42,7 +43,7 @@ export const Navbar = () => {
               My truth
             </span>
           </Link>
-          {isSignedIn ? <UserNavItems /> : <GuestNavItems />}
+          {status === "authenticated" ? <UserNavItems /> : <GuestNavItems />}
         </div>
       </aside>
     </>

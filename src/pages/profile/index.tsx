@@ -1,12 +1,12 @@
 import Head from "next/head";
 import { PageLayout } from "~/components/layout";
 import Image from "next/image";
-import { useUser } from "@clerk/nextjs";
+import { useSession } from "next-auth/react";
 
 const ProfilePage = () => {
-  const { user } = useUser();
+  const { data } = useSession();
 
-  if (!user) {
+  if (!data) {
     return (
       <>
         <Head>
@@ -22,23 +22,23 @@ const ProfilePage = () => {
   return (
     <>
       <Head>
-        <title>{user.username} Profile</title>
+        <title>{data.user.name ?? "Anon"} Profile</title>
       </Head>
       <PageLayout>
         <div className="relative flex h-32 border-b border-slate-400 bg-cyan-900 p-4">
-          <Image
-            src={user.profileImageUrl}
-            alt={`${
-              user.username || user.firstName || "Anonymous"
-            } Profile Image`}
-            className="absolute bottom-0 left-0 -mb-12 ml-6 h-24 w-24 rounded-full border-2 border-gray-900 bg-gray-900"
-            width={96}
-            height={96}
-          />
+          {data.user.image && (
+            <Image
+              src={data.user.image}
+              alt={`${data.user.name ?? "Anon"} Profile Image`}
+              className="absolute bottom-0 left-0 -mb-12 ml-6 h-24 w-24 rounded-full border-2 border-gray-900 bg-gray-900"
+              width={96}
+              height={96}
+            />
+          )}
         </div>
         <div className="h-12" />
         <div className="border-b border-slate-400 p-4 pb-8 text-2xl font-bold">
-          {user.username || user.firstName || "Anonymous"}
+          {data.user.name ?? "Anon"}
         </div>
       </PageLayout>
     </>
