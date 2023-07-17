@@ -8,6 +8,10 @@ on:
 
 env:
   DATABASE_URL: "https://fake.com"
+  NEXTAUTH_SECRET: "totally_real_secret"
+  NEXTAUTH_URL: "https://fake.com"
+  GITHUB_CLIENT_ID: "totally_real_id"
+  GITHUB_CLIENT_SECRET: "totally_real_secret"
 
 jobs:
   build:
