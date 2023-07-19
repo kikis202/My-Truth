@@ -3,11 +3,12 @@ import { Navbar } from "./navbar";
 
 export const PageLayout = (props: PropsWithChildren) => {
   return (
-    <main className="flex h-screen flex-col-reverse md:grid md:grid-cols-5 lg:grid-cols-4">
+    <main className="flex h-screen">
       <Navbar />
-      <div className="w-full grow overflow-y-scroll border-x border-slate-400 md:col-span-3 md:h-full lg:col-span-2">
+      <div className="mb-16 w-screen max-w-2xl overflow-y-scroll border-slate-400 sm:mb-0 sm:w-4/5 sm:border-x md:h-full lg:w-3/5">
         {props.children}
       </div>
+      <div className="hidden flex-1 sm:block" />
     </main>
   );
 };

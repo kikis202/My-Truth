@@ -1,12 +1,20 @@
-import Link from "next/link";
+import { useSession } from "next-auth/react";
+
+const HomeSVG = () => (
+  <svg
+    className="h-5 w-5 text-slate-400 transition duration-75  group-hover:text-slate-200"
+    fill="currentColor"
+    viewBox="0 0 21 20"
+  >
+    <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+  </svg>
+);
 
 const ProfileSVG = () => (
   <svg
-    className="ml-1 h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-    aria-hidden="true"
-    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5 text-slate-400 transition duration-75  group-hover:text-slate-200"
     fill="currentColor"
-    viewBox="0 0 22 21"
+    viewBox="0 0 15 20"
   >
     <path
       stroke="currentColor"
@@ -24,28 +32,24 @@ interface NavElementProps {
   title: string;
 }
 
-const NavElement: React.FC<NavElementProps> = (props) => {
-  return (
-    <li>
-      <Link
-        href={props.href}
-        className="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-      >
-        {props.svg}
-        <span className="ml-3">{props.title}</span>
-      </Link>
-    </li>
-  );
-};
+const userItems: NavElementProps[] = [
+  {
+    href: "/",
+    title: "Home",
+    svg: <HomeSVG />,
+  },
+  {
+    svg: <ProfileSVG />,
+    href: "/profile",
+    title: "Profile",
+  },
+];
 
-export const UserNavItems = () => {
-  return (
-    <ul className="ml-2 space-y-2 font-medium">
-      <NavElement href="/profile" title="Profile" svg={<ProfileSVG />} />
-    </ul>
-  );
-};
+const guestItems: NavElementProps[] = [];
 
-export const GuestNavItems = () => {
-  return <ul className="ml-2 space-y-2 font-medium"></ul>;
+export const useNavItems = () => {
+  const { status } = useSession();
+
+  if (status === "authenticated") return userItems;
+  return guestItems;
 };
