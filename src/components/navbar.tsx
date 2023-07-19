@@ -37,7 +37,7 @@ const MobileNavElement: React.FC<NavElementProps> = ({
   onClick,
 }) => {
   return (
-    <div className="flex h-full w-full items-center justify-center">
+    <div className="flex items-center justify-center">
       <Link
         href={href}
         className="group inline-flex h-14 w-36 flex-col items-center justify-center rounded-lg hover:bg-slate-700"
@@ -139,9 +139,12 @@ export const Navbar = () => {
       )}
 
       {/*---------- Mobile navigation ----------*/}
-      <div className="slate-400 fixed bottom-0 left-0 z-50 h-16 w-full border-t  border-slate-400 bg-slate-800 sm:hidden">
+      <div className="slate-400 fixed bottom-0 left-0 z-50 h-16 w-screen border-t border-slate-400 bg-slate-800 sm:hidden">
         <div
-          className={`mx-auto grid h-full max-w-lg grid-cols-${navItems.length} font-medium`}
+          className={`mx-auto grid h-full max-w-lg font-medium`}
+          style={{
+            gridTemplateColumns: `repeat(${navItems.length}, minmax(0, 1fr))`,
+          }}
         >
           {navItems.map((item, index) => (
             <MobileNavElement key={index} {...item} />
