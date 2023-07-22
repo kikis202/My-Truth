@@ -45,7 +45,13 @@ const userItems: NavElementProps[] = [
   },
 ];
 
-const guestItems: NavElementProps[] = [];
+const guestItems: NavElementProps[] = [
+  {
+    href: "/",
+    title: "Home",
+    svg: <HomeSVG />,
+  },
+];
 
 export const useNavItems = () => {
   const { status } = useSession();

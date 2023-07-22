@@ -3,6 +3,8 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 import { PostView } from "~/components/postView";
 import { generateSSHelper } from "~/server/helpers/ssgHelper";
+import Link from "next/link";
+import Image from "next/image";
 
 const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.posts.getById.useQuery({ id });
@@ -26,8 +28,16 @@ const SinglePostPage: NextPage<{ id: string }> = ({ id }) => {
         <title>Post</title>
       </Head>
       <main className="flex h-screen items-center justify-center">
-        <div className="h-fit w-full border border-slate-400 md:max-w-2xl">
-          <PostView {...data} />
+        <div className="w-full md:max-w-2xl">
+          <Link href="/" className="mb-4 flex h-12 w-fit items-center p-4">
+            <Image src="/favicon.svg" width={48} height={48} alt="logo" />
+            <span className="ml-4 self-center whitespace-nowrap text-3xl font-semibold text-slate-200">
+              My truth
+            </span>
+          </Link>
+          <div className="h-fit w-full border border-slate-400 md:max-w-2xl">
+            <PostView {...data} />
+          </div>
         </div>
       </main>
     </>

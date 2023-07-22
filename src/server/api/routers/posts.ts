@@ -58,13 +58,6 @@ export const postsRouter = createTRPCRouter({
         });
       }
 
-      if (!post) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Post not found",
-        });
-      }
-
       return post;
     }),
   create: protectedProcedure
