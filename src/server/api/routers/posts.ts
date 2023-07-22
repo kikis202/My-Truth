@@ -109,13 +109,13 @@ export const postsRouter = createTRPCRouter({
         include: { author: true },
         take: limit + 1,
         where: authorId ? { authorId } : {},
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
         cursor: cursor
           ? {
               createdAt: new Date(cursor.createdAt),
               id: cursor.id,
             }
           : undefined,
-        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       });
 
       let nextCursor: typeof cursor = undefined;
