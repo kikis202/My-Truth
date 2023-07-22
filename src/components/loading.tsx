@@ -32,3 +32,11 @@ export const LoadingPage = (props: { size?: number }) => {
     </div>
   );
 };
+
+export const LoadingPost = () => {
+  return (
+    <div className="flex h-28 items-center justify-center border-b border-slate-400 bg-gray-800 p-8">
+      <LoadingSpinner size={24} />
+    </div>
+  );
+};
