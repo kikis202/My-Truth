@@ -5,9 +5,9 @@ import { LoadingPage } from "~/components/loading";
 import { useState } from "react";
 import toast, { LoaderIcon } from "react-hot-toast";
 import { PageLayout } from "~/components/layout";
-import { PostView } from "~/components/postView";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
+import { Feed } from "~/components/feed";
 
 const CreatePostWizard = () => {
   const [input, setInput] = useState("");
@@ -77,21 +77,6 @@ const CreatePostWizard = () => {
       >
         Sign Out
       </button>
-    </div>
-  );
-};
-
-const Feed = () => {
-  const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
-
-  if (postsLoading) return <LoadingPage size={40} />;
-  if (!data) return <div>Something went wrong</div>;
-
-  return (
-    <div className="flex flex-col">
-      {data.map((post) => (
-        <PostView key={post.id} {...post} />
-      ))}
     </div>
   );
 };

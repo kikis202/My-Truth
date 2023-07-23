@@ -71,4 +71,5 @@ model Post {
     author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
     @@index([authorId], name: "authorId")
+    @@index([createdAt], name: "createdAt")
 }
