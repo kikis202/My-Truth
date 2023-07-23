@@ -100,7 +100,7 @@ export const postsRouter = createTRPCRouter({
             id: z.string(),
           })
           .nullish(),
-        authorId: z.string().nullable(),
+        authorId: z.string().nullish(),
       })
     )
     .query(async ({ ctx, input }) => {
