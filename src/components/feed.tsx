@@ -17,6 +17,7 @@ export const Feed = (props: { userId?: string }) => {
     },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
+      refetchOnWindowFocus: false,
     }
   );
 
