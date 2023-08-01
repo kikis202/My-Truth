@@ -16,9 +16,29 @@ const CreatePostWizard = () => {
   const ctx = api.useContext();
 
   const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
-    onSuccess: () => {
+    onSuccess: async (post) => {
       setInput("");
-      void ctx.posts.getAll.invalidate();
+      await ctx.posts.getInfinite.cancel();
+
+      ctx.posts.getInfinite.setInfiniteData({ limit: 10 }, (data) => {
+        if (!data) {
+          return {
+            pages: [{ posts: [post], nextCursor: undefined }],
+            pageParams: [],
+          };
+        }
+        return {
+          ...data,
+          pages: [
+            {
+              ...data.pages[0],
+              posts: [post, ...(data.pages[0]?.posts ?? [])],
+              nextCursor: data.pages[0]?.nextCursor,
+            },
+            ...data.pages.slice(1),
+          ],
+        };
+      });
     },
     onError: (err) => {
       const zodErrorMessage = err.data?.zodError?.fieldErrors?.content;
@@ -83,7 +103,15 @@ const CreatePostWizard = () => {
 
 const Home: NextPage = () => {
   // Start fetching asap
-  api.posts.getAll.useQuery();
+  api.posts.getInfinite.useInfiniteQuery(
+    {
+      limit: 10,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      refetchOnWindowFocus: false,
+    }
+  );
   const { status } = useSession();
 
   if (status === "loading") return <LoadingPage></LoadingPage>;

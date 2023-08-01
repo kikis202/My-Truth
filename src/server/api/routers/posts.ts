@@ -86,6 +86,7 @@ export const postsRouter = createTRPCRouter({
           authorId,
           content: input.content,
         },
+        include: { author: true },
       });
 
       return post;
