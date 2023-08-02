@@ -39,8 +39,8 @@ const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
             />
           )}
         </div>
-        <div className="h-12" />
-        <div className="border-b border-slate-400 p-4 pb-8 text-2xl font-bold">
+        <div className="h-12 bg-gray-900" />
+        <div className="border-b border-slate-400 bg-gray-900 p-4 pb-8 text-2xl font-bold">
           {data.name ?? "Anon"}
         </div>
         <Feed userId={id} />
