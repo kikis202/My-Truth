@@ -15,9 +15,9 @@ export const PostView = (props: PostWithUser) => {
   return (
     <div
       key={post.id}
-      className="flex gap-4 border-b border-slate-400 bg-gray-800 p-8"
+      className="flex gap-4 border-b border-slate-400 bg-slate-800 p-8"
     >
-      <div>
+      <div className="min-w-fit">
         <Link href={`/${author.id}`}>
           {author.image && (
             <Image
@@ -30,14 +30,14 @@ export const PostView = (props: PostWithUser) => {
           )}
         </Link>
       </div>
-      <div className="flex flex-col">
+      <div className="flex grow flex-col">
         <div className="flex items-center gap-1">
           <Link href={`/${author.id}`}>
-            <span className="text-sm text-slate-400">{`@${
+            <span className="min-w-fit text-sm text-slate-400">{`@${
               author.name ?? "Anon"
             }`}</span>
           </Link>
-          <span className="text-xs font-thin text-slate-500">
+          <span className="min-w-fit text-xs font-thin text-slate-500">
             {`- ${dayjs(post.createdAt).fromNow()}`}
           </span>
         </div>
