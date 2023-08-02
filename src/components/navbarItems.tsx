@@ -1,4 +1,5 @@
 import { useSession } from "next-auth/react";
+import { useMemo } from "react";
 
 const HomeSVG = () => (
   <svg
@@ -32,19 +33,6 @@ interface NavElementProps {
   title: string;
 }
 
-const userItems: NavElementProps[] = [
-  {
-    href: "/",
-    title: "Home",
-    svg: <HomeSVG />,
-  },
-  {
-    svg: <ProfileSVG />,
-    href: "/profile",
-    title: "Profile",
-  },
-];
-
 const guestItems: NavElementProps[] = [
   {
     href: "/",
@@ -54,8 +42,21 @@ const guestItems: NavElementProps[] = [
 ];
 
 export const useNavItems = () => {
-  const { status } = useSession();
+  const { data } = useSession();
 
-  if (status === "authenticated") return userItems;
-  return guestItems;
+  const navItems = useMemo(() => {
+    if (data?.user?.id) {
+      return [
+        ...guestItems,
+        {
+          svg: <ProfileSVG />,
+          href: `/${data?.user?.id}`,
+          title: "Profile",
+        },
+      ];
+    }
+    return guestItems;
+  }, [data?.user?.id]);
+
+  return navItems;
 };
